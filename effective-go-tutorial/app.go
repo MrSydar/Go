@@ -15,21 +15,24 @@ type KindPerson struct {
 	phrase string
 }
 
-type RudePerson struct {
+//A structure representing a boring person which has nothing to say
+type BoringPerson struct {
 	name string
 	age  int
 }
 
-//Variables can be grouped
+//Variables can be grouped to show relationships
 //A group of good people
 var (
-	eddie  KindPerson
-	meddie KindPerson
+	eddie           KindPerson
+	meddie          KindPerson
+	concertLocation string
 )
 
 //A group of bad people
 var (
-	Eran RudePerson
+	eran         BoringPerson
+	homeLocation string
 )
 
 //Say function is used to make kind person speak
