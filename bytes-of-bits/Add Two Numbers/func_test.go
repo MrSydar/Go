@@ -4,40 +4,87 @@ import (
 	"testing"
 )
 
-func arrayToListNode(arr []int) *ListNode {
-	if len(arr) == 1 {
-		return &ListNode{arr[0], nil}
-	} else {
-		return &ListNode{arr[0], arrayToListNode(arr[1:])}
+func TestEqualsSameMultipleElementsTillEndOfShorterNotSameLength(t *testing.T) {
+	l1 := &ListNode{0, &ListNode{5, &ListNode{-1, nil}}}
+	l2 := &ListNode{0, &ListNode{5, &ListNode{-1, &ListNode{-1, nil}}}}
+
+	if l1.Equals(l2) || l2.Equals(l1) {
+		t.Fatal("Lists are not equal")
 	}
 }
 
-func (l1 *ListNode) equals(l2 *ListNode) bool {
-	if l1 == nil && l2 != nil || l1 != nil && l2 == nil || l1 != nil && l2 != nil && l1.Val != l2.Val {
-		return false
-	} else if l1 == nil && l2 == nil {
-		return true
-	} else {
-		return l1.Next.equals(l2.Next)
+func TestEqualsNotSameMultipleElementsSameLength(t *testing.T) {
+	l1 := &ListNode{0, &ListNode{1, &ListNode{-1, nil}}}
+	l2 := &ListNode{0, &ListNode{5, &ListNode{-1, nil}}}
+
+	if l1.Equals(l2) || l2.Equals(l1) {
+		t.Fatal("Lists are not equal")
 	}
 }
 
-func TestAddTwoNumbers(t *testing.T) {
-	l1, l2 := arrayToListNode([]int{2, 4, 3}), arrayToListNode([]int{5, 6, 4})
-	expected1 := arrayToListNode([]int{7, 0, 8})
-	if !expected1.equals(AddTwoNumbers(l1, l2)) {
-		t.Fatalf("TC1")
-	}
+func TestEqualsSameMultipleElementsSameLength(t *testing.T) {
+	l1 := &ListNode{0, &ListNode{1, &ListNode{-4, nil}}}
+	l2 := &ListNode{0, &ListNode{1, &ListNode{-4, nil}}}
 
-	l3, l4 := arrayToListNode([]int{0}), arrayToListNode([]int{0})
-	expected2 := arrayToListNode([]int{0})
-	if !expected2.equals(AddTwoNumbers(l3, l4)) {
-		t.Fatalf("TC2")
+	if !l1.Equals(l2) && !l2.Equals(l1) {
+		t.Fatal("Lists are equal")
 	}
+}
 
-	l5, l6 := arrayToListNode([]int{9, 9, 9, 9, 9, 9, 9}), arrayToListNode([]int{9, 9, 9, 9})
-	expected3 := arrayToListNode([]int{8, 9, 9, 9, 0, 0, 0, 1})
-	if !expected3.equals(AddTwoNumbers(l5, l6)) {
-		t.Fatalf("TC2")
+func TestEqualsNotSameSingleElement(t *testing.T) {
+	l1 := &ListNode{0, nil}
+	l2 := &ListNode{1, nil}
+
+	if l1.Equals(l2) || l2.Equals(l1) {
+		t.Fatal("Lists are not equal")
+	}
+}
+
+func TestEqualsSameSingleElement(t *testing.T) {
+	l1 := &ListNode{0, nil}
+	l2 := &ListNode{0, nil}
+
+	if !l1.Equals(l2) && !l2.Equals(l1) {
+		t.Fatal("Lists are equal")
+	}
+}
+
+func TestArrayToListNode(t *testing.T) {
+	l1 := &ListNode{0, &ListNode{1, &ListNode{2, nil}}}
+	l2 := ArrayToListNode([]int{0, 1, 2})
+
+	if !l1.Equals(l2) {
+		t.Fatal("Bad list node generated")
+	}
+}
+
+func TestToString(t *testing.T) {
+	l := ArrayToListNode([]int{0, 1, 2})
+	lStr := "0, 1, 2"
+
+	if l.ToString() != lStr {
+		t.Fatal("Bad string generated")
+	}
+}
+
+func TestAddTwoSmallNumbers(t *testing.T) {
+	l1 := ArrayToListNode([]int{1, 2, 3})
+	l2 := ArrayToListNode([]int{2, 1, 3})
+	expected := ArrayToListNode([]int{3, 3, 6})
+	actual := AddTwoNumbers(l1, l2)
+
+	if !actual.Equals(expected) {
+		t.Fatalf("Bad sum. Expected %s, but got %s.", expected.ToString(), actual.ToString())
+	}
+}
+
+func TestAddLargeWithCarryNumbers(t *testing.T) {
+	l1 := ArrayToListNode([]int{9, 9, 9, 9})
+	l2 := ArrayToListNode([]int{9, 9, 9, 9})
+	expected := ArrayToListNode([]int{1, 9, 9, 9, 8})
+	actual := AddTwoNumbers(l1, l2)
+
+	if !actual.Equals(expected) {
+		t.Fatalf("Bad sum. Expected %s, but got %s.", expected.ToString(), actual.ToString())
 	}
 }
