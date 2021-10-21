@@ -81,7 +81,7 @@ func TestAddTwoSmallNumbers(t *testing.T) {
 func TestAddLargeWithCarryNumbers(t *testing.T) {
 	l1 := ArrayToListNode([]int{9, 9, 9, 9})
 	l2 := ArrayToListNode([]int{9, 9, 9, 9})
-	expected := ArrayToListNode([]int{1, 9, 9, 9, 8})
+	expected := ArrayToListNode([]int{8, 9, 9, 9, 1})
 	actual := AddTwoNumbers(l1, l2)
 
 	if !actual.Equals(expected) {

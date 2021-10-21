@@ -17,65 +17,35 @@ func doOneDigitSum(a int, b int) (sum int, carry bool) {
 	}
 }
 
-func sumFromEnd(l *ListNode, thisCh chan int, otherCh chan int, digitNum int, isPrimary bool) (solution *ListNode, carry bool) {
-	digitNum += 1
-
-	if l.Next == nil {
-		thisCh <- digitNum
-		otherDigitNum := <-otherCh
-
-		if digitNum > otherDigitNum || digitNum == otherDigitNum && isPrimary {
-			currDigitSum, currHasCarry := doOneDigitSum(l.Val, <-otherCh)
-
-			return &ListNode{currDigitSum, nil}, currHasCarry
-		} else {
-			thisCh <- l.Val
-			return
-		}
+func carryAdd(l *ListNode, prevCarry bool) (solution *ListNode) {
+	if prevCarry {
+		return zipAdd(l, &ListNode{1, nil}, false)
 	} else {
-		lSum, prevHasCarry := sumFromEnd(l.Next, thisCh, otherCh, digitNum, isPrimary)
-
-		if lSum != nil {
-			var currDigitSum int
-			var currHasCarry bool
-
-			otherDigit := <-otherCh
-
-			if prevHasCarry {
-				currDigitSum, currHasCarry = doOneDigitSum(l.Val+1, otherDigit)
-			} else {
-				currDigitSum, currHasCarry = doOneDigitSum(l.Val, otherDigit)
-			}
-
-			return &ListNode{currDigitSum, lSum}, currHasCarry
-		} else {
-			thisCh <- l.Val
-			return
-		}
+		return l
 	}
 }
 
-func startSumFromEnd(l *ListNode, thisCh chan int, otherCh chan int, isPrimary bool, solution chan *ListNode) {
-	lSum, prevHasCarry := sumFromEnd(l, thisCh, otherCh, 0, isPrimary)
-
-	if lSum != nil {
-		if prevHasCarry {
-			lSum = &ListNode{1, lSum}
-		}
-		solution <- lSum
+func zipAdd(l1 *ListNode, l2 *ListNode, prevCarry bool) (solution *ListNode) {
+	if l1 == nil {
+		return carryAdd(l2, prevCarry)
+	} else if l2 == nil {
+		return carryAdd(l1, prevCarry)
 	} else {
-		close(thisCh)
+		var sum int
+		var carry bool
+
+		if prevCarry {
+			sum, carry = doOneDigitSum(l1.Val, l2.Val+1)
+		} else {
+			sum, carry = doOneDigitSum(l1.Val, l2.Val)
+		}
+
+		return &ListNode{sum, zipAdd(l1.Next, l2.Next, carry)}
 	}
 }
 
 func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	l1Ch, l2Ch := make(chan int, 1), make(chan int, 1)
-	solution := make(chan *ListNode)
-
-	go startSumFromEnd(l1, l1Ch, l2Ch, true, solution)
-	go startSumFromEnd(l2, l2Ch, l1Ch, false, solution)
-
-	return <-solution
+	return zipAdd(l1, l2, false)
 }
 
 func ArrayToListNode(arr []int) *ListNode {
