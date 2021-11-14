@@ -5,9 +5,11 @@ import (
 	"fmt"
 )
 
-func checkInput(s []int, k int) error {
-	if k == 0 {
-		return errors.New("the k paramether can't be zero")
+func checkPredefinedInputParams(s []int, k int) error {
+	if k <= 1 {
+		return errors.New("the k paramether can't be one or negative")
+	} else if len(s) == 0 {
+		return errors.New("the parts array can't be empty")
 	} else {
 		for i := 0; i < len(s); i++ {
 			if s[i] >= k {
@@ -18,12 +20,16 @@ func checkInput(s []int, k int) error {
 	return nil
 }
 
+/*
 func GetPartsRandom(n int, k int) (parts []int, err error) {
-	return nil, nil
+	parts = make([]int, n)
+
+	return parts, nil
 }
+*/
 
 func GetParts(s []int, k int) (parts []int, err error) {
-	if iErr := checkInput(s, k); iErr != nil {
+	if iErr := checkPredefinedInputParams(s, k); iErr != nil {
 		return nil, iErr
 	}
 
@@ -38,7 +44,7 @@ func GetParts(s []int, k int) (parts []int, err error) {
 }
 
 func GetSecret(s []int, k int) (secret int, err error) {
-	if iErr := checkInput(s, k); iErr != nil {
+	if iErr := checkPredefinedInputParams(s, k); iErr != nil {
 		return -1, iErr
 	}
 
