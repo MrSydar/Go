@@ -11,7 +11,7 @@ func TestGenerateTrivialPartsForKEq1000AndNEq3AndSRandom(t *testing.T) {
 
 	actual, err := GetPartsRandom(n, k)
 	if err != nil {
-		t.Fatalf("error was not expected")
+		t.Fatalf("error was not expected, but got %v", err)
 	}
 
 	if len(actual) != n {
@@ -43,9 +43,13 @@ func TestGenerateTrivialPartsForKEq1000AndNEq3AndSEq456AndS1Eq856AndS2Eq231(t *t
 	arr := []int{456, 856, 231}
 	k := 1000
 
-	actual, _ := GetParts(arr, k)
+	actual, err := GetParts(arr, k)
 	if expected := []int{856, 231, 369}; !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected parts %v, but got %v", expected, actual)
+	}
+
+	if err != nil {
+		t.Fatalf("error was not expected, but got %v", err)
 	}
 }
 
@@ -128,9 +132,13 @@ func TestGenerateTrivialSecretForKEq1000AndNEq3AndS1Eq856AndS2Eq231AndS3Eq369(t 
 	parts := []int{856, 231, 369}
 	k := 1000
 
-	actual, _ := GetSecret(parts, k)
+	actual, err := GetSecret(parts, k)
 	if expected := 456; actual != expected {
 		t.Fatalf("expected secret %d, but got %d", expected, actual)
+	}
+
+	if err != nil {
+		t.Fatalf("error was not expected, but got %v", err)
 	}
 }
 
