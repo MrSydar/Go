@@ -3,32 +3,39 @@ package trivial
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 )
 
 func checkPredefinedInputParams(s []int, k int) error {
 	if k <= 1 {
-		return errors.New("the k paramether can't be one or negative")
+		return errors.New("the k parameter can't equals or less than 1")
 	} else if len(s) == 0 {
-		return errors.New("the parts array can't be empty")
+		return errors.New("n can't be zero")
 	} else {
 		for i := 0; i < len(s); i++ {
 			if s[i] >= k {
-				return fmt.Errorf("element on index %v can't be greater or equal the k value", i)
+				return fmt.Errorf("element on index %v can't be greater or equal to the k value", i)
 			}
 		}
+		return nil
 	}
-	return nil
 }
 
-/*
-func GetPartsRandom(n int, k int) (parts []int, err error) {
-	parts = make([]int, n)
+func GetPartsRandom(n int, k int) ([]int, error) {
+	if n < 0 {
+		return nil, errors.New("n can't be negative")
+	}
 
-	return parts, nil
+	arr := make([]int, n)
+
+	for i := 0; i < n; i++ {
+		arr[i] = rand.Intn(k)
+	}
+
+	return GetParts(arr, k)
 }
-*/
 
-func GetParts(s []int, k int) (parts []int, err error) {
+func GetParts(s []int, k int) ([]int, error) {
 	if iErr := checkPredefinedInputParams(s, k); iErr != nil {
 		return nil, iErr
 	}
@@ -43,7 +50,7 @@ func GetParts(s []int, k int) (parts []int, err error) {
 	return append(s[1:], lastPart), nil
 }
 
-func GetSecret(s []int, k int) (secret int, err error) {
+func GetSecret(s []int, k int) (int, error) {
 	if iErr := checkPredefinedInputParams(s, k); iErr != nil {
 		return -1, iErr
 	}
