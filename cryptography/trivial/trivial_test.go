@@ -5,7 +5,6 @@ import (
 	"testing"
 )
 
-/*
 func TestGenerateTrivialPartsForKEq1000AndNEq3AndSRandom(t *testing.T) {
 	n := 3
 	k := 1000
@@ -25,7 +24,20 @@ func TestGenerateTrivialPartsForKEq1000AndNEq3AndSRandom(t *testing.T) {
 		}
 	}
 }
-*/
+
+func TestGenerateTrivialPartsForNegativeN(t *testing.T) {
+	n := -3
+	k := 1000
+
+	actual, err := GetPartsRandom(n, k)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+
+	if actual != nil {
+		t.Fatalf("expected parts to be nil, but got %v", actual)
+	}
+}
 
 func TestGenerateTrivialPartsForKEq1000AndNEq3AndSEq456AndS1Eq856AndS2Eq231(t *testing.T) {
 	arr := []int{456, 856, 231}
